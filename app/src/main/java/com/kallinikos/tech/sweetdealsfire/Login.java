@@ -100,6 +100,7 @@ public class Login extends AppCompatActivity {
         });
     }
 
+
     public boolean validate() {
         boolean valid = true;
 
