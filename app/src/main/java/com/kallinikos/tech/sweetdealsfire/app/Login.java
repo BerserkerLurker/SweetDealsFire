@@ -1,12 +1,13 @@
-package com.kallinikos.tech.sweetdealsfire;
+package com.kallinikos.tech.sweetdealsfire.app;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.nfc.Tag;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -15,6 +16,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.kallinikos.tech.sweetdealsfire.R;
 
 public class Login extends AppCompatActivity {
 
@@ -26,13 +28,18 @@ public class Login extends AppCompatActivity {
     private EditText inputEmail;
     private EditText inputPassword;
 
+    private ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        //prevent keyboard from popping out
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         inputEmail = (EditText)findViewById(R.id.input_email);
         inputPassword = (EditText)findViewById(R.id.input_password);
+
+        progressDialog = new ProgressDialog(this);
 
         findViewById(R.id.btn_login).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,6 +57,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
+
                 if (user != null){
                     //User is signed in
                     Log.d(TAG,"onAuthStateChanged:signed_in:"+user.getUid());
@@ -60,6 +68,14 @@ public class Login extends AppCompatActivity {
             }
         };
         //-----Firebase-----
+
+        findViewById(R.id.link_signup).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(),SignUp.class);
+                startActivity(i);
+            }
+        });
     }
 
     @Override
@@ -76,6 +92,12 @@ public class Login extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        //Disable going back to the main activity
+        moveTaskToBack(true);
+    }
+
     private void signIn(String email,String password){
         Log.d(TAG,"signIn"+email);
         if(!validate()){
@@ -83,6 +105,8 @@ public class Login extends AppCompatActivity {
         }
 
        // showProgressDialog();
+        progressDialog.setMessage("Logging in...");
+        progressDialog.show();
 
         mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
@@ -90,11 +114,15 @@ public class Login extends AppCompatActivity {
                 Log.d(TAG,"signInWithEmail:onComplete"+task.isSuccessful());
                 if(!task.isSuccessful()){
                     Log.w(TAG,"signInWithEmail:Failed",task.getException());
+                    progressDialog.dismiss();
                     Toast.makeText(Login.this,"Login Failed",Toast.LENGTH_SHORT).show();
+
                 }else{
                     Toast.makeText(Login.this,"Welcome!!",Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(getApplicationContext(),MainActivity.class);
                     startActivity(i);
+                    finish();
+                    progressDialog.dismiss();
                 }
             }
         });

@@ -7,4 +7,61 @@
 
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
+
+    <string-array name="categories">
+        <item>Fashion</item>
+        <item>Sports</item>
+        <item>Electronics</item>
+        <item>Motors</item>
+        <item>Collectibles and Art</item>
+        <item>Home and Garden</item>
+    </string-array>
+
+    <string-array name="sub_categories_fashion">
+        <item>Women</item>
+        <item>Men</item>
+        <item>Kids</item>
+        <item>Accessories</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="sub_categories_Sports">
+        <item>Footwear</item>
+        <item>Equipments</item>
+        <item>Team Wear</item>
+        <item>Indoor Fitness</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="sub_categories_electronics">
+        <item>Cellphones and Accessories</item>
+        <item>Computers</item>
+        <item>Cameras and photos</item>
+        <item>TV and Audio</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="sub_categories_motors">
+        <item>Cars and Trucks</item>
+        <item>Motorcycles</item>
+        <item>Boats</item>
+        <item>Parts and Accessories</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="sub_categories_collectibles">
+        <item>Art</item>
+        <item>Collectibles</item>
+        <item>Pottery</item>
+        <item>Hand Craft</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="sub_categories_home">
+        <item>Furnitures</item>
+        <item>House Supplies</item>
+        <item>Garden</item>
+        <item>Pet Supplies</item>
+        <item>Other</item>
+    </string-array>
 </resources>
