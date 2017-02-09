@@ -51,11 +51,8 @@ public class AdsFragment extends Fragment implements Callback{
     private String userId;
     private String catClicked;
 
-    final private DatabaseReference mref = FirebaseDatabase.getInstance().getReference();;
+    final private DatabaseReference mref = FirebaseDatabase.getInstance().getReference();
     private int choice=0;
-
-    private TextView title;
-    private TextView price;
 
     public AdsFragment() {
         // Required empty public constructor
@@ -174,8 +171,6 @@ public class AdsFragment extends Fragment implements Callback{
         return subs;
     }
 
-    private Category adsc = new Category();
-    private SubCategory adss = new SubCategory();
 
     public void setChoice(int choice) {
         this.choice = choice;

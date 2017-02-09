@@ -55,7 +55,7 @@ public class NavigationDrawerItem {
 
     private static String[] getTitles() {
         return new String[]{
-                "Home", "Favorites", "New Ad", "Sign out", "Help", "About"
+                "Home", "Favorites", "My Ads", "New Ad", "Sign out", "About"
         };
     }
 }

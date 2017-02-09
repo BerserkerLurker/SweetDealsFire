@@ -68,6 +68,16 @@
 
 
         </FrameLayout>
+
+        <FrameLayout
+            class="com.kallinikos.tech.sweetdealsfire.app.FavsListing"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/favsListFragment"
+            tools:layout="@layout/fragment_favs_listing">
+
+
+        </FrameLayout>
     </LinearLayout>
 
     <fragment

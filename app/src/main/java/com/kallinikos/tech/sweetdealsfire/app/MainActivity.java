@@ -102,6 +102,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public String getUid() {
+        return Uid;
+    }
+
     //Setup Category Fragment and Close other in Home
    /* public void categories(){
         Fragment fragment = new CatFragment();
@@ -113,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.catFragment).setVisibility(View.VISIBLE);
         findViewById(R.id.adsListFragment).setVisibility(View.GONE);
         findViewById(R.id.adPageFragment).setVisibility(View.GONE);
+        findViewById(R.id.favsListFragment).setVisibility(View.GONE);
+
 
         if(getSupportFragmentManager().findFragmentById(R.id.newAdFragment) != null) {
             getSupportFragmentManager().beginTransaction().
@@ -125,6 +131,9 @@ public class MainActivity extends AppCompatActivity {
         if(getSupportFragmentManager().findFragmentById(R.id.adPageFragment) != null) {
             getSupportFragmentManager().beginTransaction().
                     remove(getSupportFragmentManager().findFragmentById(R.id.adPageFragment)).commit();
+        }if(getSupportFragmentManager().findFragmentById(R.id.favsListFragment) != null) {
+            getSupportFragmentManager().beginTransaction().
+                    remove(getSupportFragmentManager().findFragmentById(R.id.favsListFragment)).commit();
         }
 
         Fragment fragment = new CatFragment();
@@ -139,6 +148,8 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.newAdFragment).setVisibility(View.VISIBLE);
         findViewById(R.id.adsListFragment).setVisibility(View.GONE);
         findViewById(R.id.adPageFragment).setVisibility(View.GONE);
+        findViewById(R.id.favsListFragment).setVisibility(View.GONE);
+
 
         if(getSupportFragmentManager().findFragmentById(R.id.catFragment) != null) {
             getSupportFragmentManager().beginTransaction().
@@ -151,6 +162,9 @@ public class MainActivity extends AppCompatActivity {
         if(getSupportFragmentManager().findFragmentById(R.id.adPageFragment) != null) {
             getSupportFragmentManager().beginTransaction().
                     remove(getSupportFragmentManager().findFragmentById(R.id.adPageFragment)).commit();
+        }if(getSupportFragmentManager().findFragmentById(R.id.favsListFragment) != null) {
+            getSupportFragmentManager().beginTransaction().
+                    remove(getSupportFragmentManager().findFragmentById(R.id.favsListFragment)).commit();
         }
 
         Fragment fragment = new NewAd();
@@ -170,6 +184,8 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.newAdFragment).setVisibility(View.GONE);
         findViewById(R.id.adsListFragment).setVisibility(View.VISIBLE);
         findViewById(R.id.adPageFragment).setVisibility(View.GONE);
+        findViewById(R.id.favsListFragment).setVisibility(View.GONE);
+
 
         if(getSupportFragmentManager().findFragmentById(R.id.catFragment) != null) {
             getSupportFragmentManager().beginTransaction().
@@ -182,7 +198,11 @@ public class MainActivity extends AppCompatActivity {
         if(getSupportFragmentManager().findFragmentById(R.id.adPageFragment) != null) {
             getSupportFragmentManager().beginTransaction().
                     remove(getSupportFragmentManager().findFragmentById(R.id.adPageFragment)).commit();
+        }if(getSupportFragmentManager().findFragmentById(R.id.favsListFragment) != null) {
+            getSupportFragmentManager().beginTransaction().
+                    remove(getSupportFragmentManager().findFragmentById(R.id.favsListFragment)).commit();
         }
+
 
         Fragment fragment = new AdsFragment();
 
@@ -203,6 +223,8 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.newAdFragment).setVisibility(View.GONE);
         findViewById(R.id.adsListFragment).setVisibility(View.GONE);
         findViewById(R.id.adPageFragment).setVisibility(View.VISIBLE);
+        findViewById(R.id.favsListFragment).setVisibility(View.GONE);
+
 
         if(getSupportFragmentManager().findFragmentById(R.id.catFragment) != null) {
             getSupportFragmentManager().beginTransaction().
@@ -215,6 +237,10 @@ public class MainActivity extends AppCompatActivity {
         if(getSupportFragmentManager().findFragmentById(R.id.adsListFragment) != null) {
             getSupportFragmentManager().beginTransaction().
                     remove(getSupportFragmentManager().findFragmentById(R.id.adsListFragment)).commit();
+        }
+        if(getSupportFragmentManager().findFragmentById(R.id.favsListFragment) != null) {
+            getSupportFragmentManager().beginTransaction().
+                    remove(getSupportFragmentManager().findFragmentById(R.id.favsListFragment)).commit();
         }
 
         Fragment fragment = new AdPage();
@@ -231,11 +257,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Setup favorites Fragment and Close other in Home
-    public void favs(String key){
+    public void favs(String Uid){
         findViewById(R.id.catFragment).setVisibility(View.GONE);
         findViewById(R.id.newAdFragment).setVisibility(View.GONE);
         findViewById(R.id.adsListFragment).setVisibility(View.GONE);
         findViewById(R.id.adPageFragment).setVisibility(View.GONE);
+        findViewById(R.id.favsListFragment).setVisibility(View.VISIBLE);
 
         if(getSupportFragmentManager().findFragmentById(R.id.catFragment) != null) {
             getSupportFragmentManager().beginTransaction().
@@ -249,18 +276,22 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().
                     remove(getSupportFragmentManager().findFragmentById(R.id.adsListFragment)).commit();
         }
+        if(getSupportFragmentManager().findFragmentById(R.id.adPageFragment) != null) {
+            getSupportFragmentManager().beginTransaction().
+                    remove(getSupportFragmentManager().findFragmentById(R.id.adPageFragment)).commit();
+        }
 
-        Fragment fragment = new AdPage();
+        Fragment fragment = new FavsListing();
 
-        //Passing the Uid of logged in user via bundle to ads fragment.
+        //Passing the Uid of logged in user via bundle to favs fragment.
         Bundle bundle = new Bundle();
         bundle.putString("Uid",Uid);
-        bundle.putString("Key",key);
+
         fragment.setArguments(bundle);
 
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.adPageFragment, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
+                .replace(R.id.favsListFragment, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
     }
 
     //Sign out and back to login screen

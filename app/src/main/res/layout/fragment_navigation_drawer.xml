@@ -2,7 +2,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:clickable="true">
 
     <RelativeLayout
         android:id="@+id/nav_header_container"
@@ -15,8 +16,12 @@
             android:layout_height="70dp"
             android:layout_centerInParent="true"
             android:scaleType="fitCenter"
-            android:src="@drawable/users"/>
+            android:src="@drawable/users"
+            android:clickable="true"/>
         <TextView
+            android:layout_marginTop="15dp"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
             android:id="@+id/dwr_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

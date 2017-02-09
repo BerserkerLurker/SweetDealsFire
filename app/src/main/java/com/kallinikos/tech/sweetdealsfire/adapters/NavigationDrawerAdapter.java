@@ -63,8 +63,12 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
                 }
                 else if (tab.equals("Favorites")){
                     ((MainActivity)holder.mcontext).getDrawerLayout().closeDrawer(Gravity.LEFT);
+                    String Uid =  ((MainActivity)holder.mcontext).getUid();
+                    ((MainActivity)holder.mcontext).favs(Uid);
 
-                    //((MainActivity)holder.mcontext).favs();
+                }
+                else if (tab.equals("My ads")){
+                    ((MainActivity)holder.mcontext).getDrawerLayout().closeDrawer(Gravity.LEFT);
 
                 }
                 else if (tab.equals("New Ad")){
@@ -84,10 +88,6 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
                         ((MainActivity)holder.mcontext).signout();
 
                     }
-
-                }
-                else if (tab.equals("Help")){
-                    ((MainActivity)holder.mcontext).getDrawerLayout().closeDrawer(Gravity.LEFT);
 
                 }
                 else if (tab.equals("About")){

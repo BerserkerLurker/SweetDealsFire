@@ -1,8 +1,11 @@
 package com.kallinikos.tech.sweetdealsfire.app;
 
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +17,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.kallinikos.tech.sweetdealsfire.adapters.NavigationDrawerAdapter;
 import com.kallinikos.tech.sweetdealsfire.models.NavigationDrawerItem;
 import com.kallinikos.tech.sweetdealsfire.R;
@@ -37,6 +43,42 @@ public class NavigationDrawerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_navigation_drawer,container,false);
+        final ImageView userPic = (ImageView)view.findViewById(R.id.dwr_userpic);
+        /*Glide.with(getContext())
+                .using(new FirebaseImageLoader())
+                .load(ref)
+                .asBitmap()
+                .placeholder(R.drawable.loadplaceholder)
+                .animate(android.R.anim.slide_in_left)
+                .error(R.drawable.noimage)
+                .centerCrop()
+                .into(new BitmapImageViewTarget(imageThumb) {
+                    @Override
+                    protected void setResource(Bitmap resource) {
+                        RoundedBitmapDrawable circularBitmapDrawable =
+                                RoundedBitmapDrawableFactory.create(getContext().getResources(), resource);
+                        circularBitmapDrawable.setCircular(true);
+                        imageThumb.setImageDrawable(circularBitmapDrawable);
+                    }});*/
+
+        Glide.with(getContext())
+                .load(R.drawable.bag)
+                .asBitmap()
+                .placeholder(R.drawable.users)
+                .animate(android.R.anim.fade_in)
+                .error(R.drawable.noimage)
+                .centerCrop()
+                .into(new BitmapImageViewTarget(userPic) {
+                    @Override
+                    protected void setResource(Bitmap resource) {
+                        RoundedBitmapDrawable circularBitmapDrawable =
+                                RoundedBitmapDrawableFactory.create(getContext().getResources(), resource);
+                        circularBitmapDrawable.setCircular(true);
+                        userPic.setImageDrawable(circularBitmapDrawable);
+                    }});
+
+
+
         setUpRecyclerView(view);
         return view;
     }
