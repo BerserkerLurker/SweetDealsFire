@@ -22,7 +22,7 @@
             android:layout_height="100dp"
             android:layout_margin="5dp"
             android:src="@drawable/bag"
-            android:layout_gravity="left"
+            android:layout_gravity="center_vertical"
             android:layout_weight="1"/>
 
         <LinearLayout
@@ -63,10 +63,10 @@
         <Button
             android:id="@+id/undo_button"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="110dp"
             android:text="Undo"
             android:textAllCaps="true"
-            android:textColor="@android:color/black"
+            android:textColor="@android:color/white"
             android:layout_gravity="end|center_vertical"
             style="@style/Base.Widget.AppCompat.Button.Borderless" />
 <!--</FrameLayout>-->
