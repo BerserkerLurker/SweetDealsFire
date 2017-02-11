@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.media.MediaMetadataCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.ScrollingMovementMethod;
@@ -121,6 +122,9 @@ public class AdPage extends Fragment {
                 setFromUsers(ad.getUser());
 
                 setFav(uid,key,ad.getUser());
+
+                //Toolbar name as cat > subcat
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(ad.getCategory()+" > "+ad.getSubcategory());
 
                 if (ad.getImgNames() != null){
                     List<AdImage> imgList = new ArrayList<AdImage>();

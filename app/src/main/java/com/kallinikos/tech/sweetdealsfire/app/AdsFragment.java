@@ -285,16 +285,19 @@ public class AdsFragment extends Fragment implements Callback{
 
                     List<String> listImgURL = new ArrayList<String>();
 
-                    if(ad.getImgNames()!=null){
-                        HashMap<String,String> hash = ad.getImgNames();
-                        for ( Map.Entry<String, String> entry : hash.entrySet()) {
-                            String name = entry.getKey();
-                            String nameExt = entry.getValue();
-                            String imgURL = "/"+dataSnapshot.getKey()+"/"+nameExt;
-                            listImgURL.add(imgURL);
+                    if (ad!=null){
+                        if(ad.getImgNames()!=null){
+                            HashMap<String,String> hash = ad.getImgNames();
+                            for ( Map.Entry<String, String> entry : hash.entrySet()) {
+                                String name = entry.getKey();
+                                String nameExt = entry.getValue();
+                                String imgURL = "/"+dataSnapshot.getKey()+"/"+nameExt;
+                                listImgURL.add(imgURL);
+                            }
                         }
+                        adapter.updateAdapter(dataSnapshot.getKey(),ad.getTitle(),ad.getPrice(),ad.getDescription(),listImgURL);
                     }
-                    adapter.updateAdapter(dataSnapshot.getKey(),ad.getTitle(),ad.getPrice(),ad.getDescription(),listImgURL);
+
                 }
 
                 @Override

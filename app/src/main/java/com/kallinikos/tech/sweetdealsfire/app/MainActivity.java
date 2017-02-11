@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private String name;
     private String Uid;
 
+    private Bundle savedInstanceState;
 
     private static final String TAG="Main";
 
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.savedInstanceState = savedInstanceState;
         setContentView(R.layout.activity_main);
 
         //User Name & Picture NavDrawer
@@ -112,6 +114,107 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.catFrame, fragment, "catFragment").addToBackStack(null).commit();
     }*/
+
+    public void categories(){
+        if (findViewById(R.id.fragment_container) != null){
+            if (savedInstanceState != null){
+                return;
+            }
+
+            toolbar.setTitle("Home");
+
+            CatFragment catFragment = new CatFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, catFragment).commit();
+        }
+    }
+
+    public void newad(){
+        if (findViewById(R.id.fragment_container) != null){
+            if (savedInstanceState != null){
+                return;
+            }
+
+            toolbar.setTitle("Create a new Ad");
+
+            NewAd newAd = new NewAd();
+            //Passing the Uid of logged in user via bundle to newAd fragment.
+            Bundle bundle = new Bundle();
+            bundle.putString("Uid",Uid);
+            newAd.setArguments(bundle);
+
+
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, newAd).commit();
+        }
+    }
+
+    public void adsListing(String cat){
+        if (findViewById(R.id.fragment_container) != null){
+            if (savedInstanceState != null){
+                return;
+            }
+            toolbar.setTitle(cat +" Ads");
+
+            AdsFragment adsFragment = new AdsFragment();
+            //Passing the Uid of logged in user via bundle to ads fragment.
+            Bundle bundle = new Bundle();
+            bundle.putString("Uid",Uid);
+            bundle.putString("Cat",cat);
+            adsFragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, adsFragment).commit();
+        }
+    }
+
+    public void adPage(String key){
+        if (findViewById(R.id.fragment_container) != null){
+            if (savedInstanceState != null){
+                return;
+            }
+
+            AdPage adPage = new AdPage();
+            //Passing the Uid of logged in user via bundle to ads fragment.
+            Bundle bundle = new Bundle();
+            bundle.putString("Uid",Uid);
+            bundle.putString("Key",key);
+            adPage.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, adPage).commit();
+        }
+    }
+
+    public void favs(String Uid){
+        if (findViewById(R.id.fragment_container) != null){
+            if (savedInstanceState != null){
+                return;
+            }
+            toolbar.setTitle("Favorites");
+
+            FavsListing favsListing = new FavsListing();
+            //Passing the Uid of logged in user via bundle to favs fragment.
+            Bundle bundle = new Bundle();
+            bundle.putString("Uid",Uid);
+            favsListing.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, favsListing).commit();
+        }
+    }
+
+    public void myads(String Uid){
+        if (findViewById(R.id.fragment_container) != null){
+            if (savedInstanceState != null){
+                return;
+            }
+
+            toolbar.setTitle("My Ads");
+
+            MyAds myAds = new MyAds();
+            //Passing the Uid of logged in user via bundle to favs fragment.
+            Bundle bundle = new Bundle();
+            bundle.putString("Uid",Uid);
+            myAds.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, myAds).commit();
+        }
+    }
+
+    /**
+
     public void categories(){
         findViewById(R.id.newAdFragment).setVisibility(View.GONE);
         findViewById(R.id.catFragment).setVisibility(View.VISIBLE);
@@ -186,11 +289,13 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.newAdFragment, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
+
     }
+
 
     //Setup ads Fragment and Close other in Home
     public void adsListing(String cat){
-        findViewById(R.id.catFragment).setVisibility(View.GONE);
+       findViewById(R.id.catFragment).setVisibility(View.GONE);
         findViewById(R.id.newAdFragment).setVisibility(View.GONE);
         findViewById(R.id.adsListFragment).setVisibility(View.VISIBLE);
         findViewById(R.id.adPageFragment).setVisibility(View.GONE);
@@ -361,6 +466,9 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.myAdsListFragment, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
     }
+
+    */
+
 
     //Sign out and back to login screen
     public void signout(){

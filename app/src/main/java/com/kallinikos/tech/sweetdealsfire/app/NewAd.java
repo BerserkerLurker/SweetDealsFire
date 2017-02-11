@@ -253,8 +253,8 @@ public class NewAd extends Fragment {
                         mStorage.putFile(Uri.parse(imglist.get(i).getImageId())).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                                Toast.makeText(getActivity().getBaseContext(), "Upload Success : "+mStorage.getPath(), Toast.LENGTH_LONG).show();
+                                Log.w("Success-----", "Upload Success : "+mStorage.getPath());
+                                //Toast.makeText(getActivity().getApplicationContext(), "Upload Success : "+mStorage.getPath(), Toast.LENGTH_LONG).show();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override

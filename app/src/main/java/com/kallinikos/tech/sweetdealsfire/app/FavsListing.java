@@ -86,6 +86,7 @@ public class FavsListing extends Fragment implements Callbackfavs{
         });
     }
 
+
     public void setList(){
         final DatabaseReference mRefFavs = mref.child("users").child(userId).child("favs");
         mRefFavs.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -93,8 +94,12 @@ public class FavsListing extends Fragment implements Callbackfavs{
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<String> keys = new ArrayList<>();
                 for (DataSnapshot keysnap : dataSnapshot.getChildren()){
-                    keys.add(keysnap.getKey());
+                    String key = keysnap.getKey();
+                        keys.add(key);
+
                 }
+
+
 
                 OnComplete(keys);
 
@@ -109,32 +114,39 @@ public class FavsListing extends Fragment implements Callbackfavs{
 
 
     @Override
-    public void OnComplete(List<String> keys) {
+    public void OnComplete(final List<String> keys) {
         Toast.makeText(getActivity().getBaseContext(),keys.size()+"",Toast.LENGTH_SHORT).show();
 
         adapter.resetAdapter();
 
         for (int i=0;i<keys.size();i++){
-            String key = keys.get(i);
+            final String key = keys.get(i);
             final DatabaseReference mrefAds = mref.child("ads");
             mrefAds.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    Ad ad = dataSnapshot.getValue(Ad.class);
-                    //Toast.makeText(getActivity().getBaseContext(), dataSnapshot.getKey() + "", Toast.LENGTH_SHORT).show();
+                    if(dataSnapshot.getValue()!=null){
+                        Ad ad = dataSnapshot.getValue(Ad.class);
+                        //Toast.makeText(getActivity().getBaseContext(), dataSnapshot.getKey() + "", Toast.LENGTH_SHORT).show();
 
-                    List<String> listImgURL = new ArrayList<String>();
+                        List<String> listImgURL = new ArrayList<String>();
 
-                    if(ad.getImgNames()!=null){
-                        HashMap<String,String> hash = ad.getImgNames();
-                        for ( Map.Entry<String, String> entry : hash.entrySet()) {
-                            String name = entry.getKey();
-                            String nameExt = entry.getValue();
-                            String imgURL = "/"+dataSnapshot.getKey()+"/"+nameExt;
-                            listImgURL.add(imgURL);
+                        if(ad.getImgNames()!=null){
+                            HashMap<String,String> hash = ad.getImgNames();
+                            for ( Map.Entry<String, String> entry : hash.entrySet()) {
+                                String name = entry.getKey();
+                                String nameExt = entry.getValue();
+                                String imgURL = "/"+dataSnapshot.getKey()+"/"+nameExt;
+                                listImgURL.add(imgURL);
+                            }
                         }
+                        adapter.updateAdapter(dataSnapshot.getKey(),ad.getTitle(),ad.getPrice(),ad.getDescription(),listImgURL);
+                    }else {
+                        mref.child("users").child(userId).child("favs").child(key).removeValue();
                     }
-                    adapter.updateAdapter(dataSnapshot.getKey(),ad.getTitle(),ad.getPrice(),ad.getDescription(),listImgURL);
+
+
+
                 }
 
                 @Override
@@ -142,8 +154,11 @@ public class FavsListing extends Fragment implements Callbackfavs{
 
                 }
             });
+
+
         }
     }
+
 
     /**
      * This is the standard support library way of implementing "swipe to delete" feature. You can do custom drawing in onChildDraw method
