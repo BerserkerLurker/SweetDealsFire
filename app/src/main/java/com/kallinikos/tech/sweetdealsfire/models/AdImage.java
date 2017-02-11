@@ -15,6 +15,8 @@ public class AdImage {
     private String imageId;
     private int price;
     private String desc;
+    private String category;
+    private String subcategory;
 
     public AdImage() {
     }
@@ -62,6 +64,22 @@ public class AdImage {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getSubcategory() {
+        return subcategory;
+    }
+
+    public void setSubcategory(String subcategory) {
+        this.subcategory = subcategory;
     }
 
     public static List<AdImage> getData(){

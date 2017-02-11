@@ -47,8 +47,8 @@ public class NavigationDrawerItem {
 
     private static int[] getImages() {
         return new int[]{
-                R.drawable.home, R.drawable.star, R.drawable.plus,
-                R.drawable.sign_out_option, R.drawable.info, R.drawable.information_button
+                R.drawable.home, R.drawable.star, R.drawable.info, R.drawable.plus,
+                R.drawable.sign_out_option, R.drawable.information_button
         };
     }
 

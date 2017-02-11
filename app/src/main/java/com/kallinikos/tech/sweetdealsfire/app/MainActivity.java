@@ -118,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.adsListFragment).setVisibility(View.GONE);
         findViewById(R.id.adPageFragment).setVisibility(View.GONE);
         findViewById(R.id.favsListFragment).setVisibility(View.GONE);
+        findViewById(R.id.myAdsListFragment).setVisibility(View.GONE);
 
 
         if(getSupportFragmentManager().findFragmentById(R.id.newAdFragment) != null) {
@@ -135,6 +136,10 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().
                     remove(getSupportFragmentManager().findFragmentById(R.id.favsListFragment)).commit();
         }
+        if(getSupportFragmentManager().findFragmentById(R.id.myAdsListFragment) != null) {
+            getSupportFragmentManager().beginTransaction().
+                    remove(getSupportFragmentManager().findFragmentById(R.id.myAdsListFragment)).commit();
+        }
 
         Fragment fragment = new CatFragment();
         getSupportFragmentManager().beginTransaction()
@@ -149,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.adsListFragment).setVisibility(View.GONE);
         findViewById(R.id.adPageFragment).setVisibility(View.GONE);
         findViewById(R.id.favsListFragment).setVisibility(View.GONE);
+        findViewById(R.id.myAdsListFragment).setVisibility(View.GONE);
 
 
         if(getSupportFragmentManager().findFragmentById(R.id.catFragment) != null) {
@@ -165,6 +171,10 @@ public class MainActivity extends AppCompatActivity {
         }if(getSupportFragmentManager().findFragmentById(R.id.favsListFragment) != null) {
             getSupportFragmentManager().beginTransaction().
                     remove(getSupportFragmentManager().findFragmentById(R.id.favsListFragment)).commit();
+        }
+        if(getSupportFragmentManager().findFragmentById(R.id.myAdsListFragment) != null) {
+            getSupportFragmentManager().beginTransaction().
+                    remove(getSupportFragmentManager().findFragmentById(R.id.myAdsListFragment)).commit();
         }
 
         Fragment fragment = new NewAd();
@@ -185,6 +195,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.adsListFragment).setVisibility(View.VISIBLE);
         findViewById(R.id.adPageFragment).setVisibility(View.GONE);
         findViewById(R.id.favsListFragment).setVisibility(View.GONE);
+        findViewById(R.id.myAdsListFragment).setVisibility(View.GONE);
 
 
         if(getSupportFragmentManager().findFragmentById(R.id.catFragment) != null) {
@@ -202,7 +213,10 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().
                     remove(getSupportFragmentManager().findFragmentById(R.id.favsListFragment)).commit();
         }
-
+        if(getSupportFragmentManager().findFragmentById(R.id.myAdsListFragment) != null) {
+            getSupportFragmentManager().beginTransaction().
+                    remove(getSupportFragmentManager().findFragmentById(R.id.myAdsListFragment)).commit();
+        }
 
         Fragment fragment = new AdsFragment();
 
@@ -224,6 +238,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.adsListFragment).setVisibility(View.GONE);
         findViewById(R.id.adPageFragment).setVisibility(View.VISIBLE);
         findViewById(R.id.favsListFragment).setVisibility(View.GONE);
+        findViewById(R.id.myAdsListFragment).setVisibility(View.GONE);
 
 
         if(getSupportFragmentManager().findFragmentById(R.id.catFragment) != null) {
@@ -241,6 +256,10 @@ public class MainActivity extends AppCompatActivity {
         if(getSupportFragmentManager().findFragmentById(R.id.favsListFragment) != null) {
             getSupportFragmentManager().beginTransaction().
                     remove(getSupportFragmentManager().findFragmentById(R.id.favsListFragment)).commit();
+        }
+        if(getSupportFragmentManager().findFragmentById(R.id.myAdsListFragment) != null) {
+            getSupportFragmentManager().beginTransaction().
+                    remove(getSupportFragmentManager().findFragmentById(R.id.myAdsListFragment)).commit();
         }
 
         Fragment fragment = new AdPage();
@@ -263,6 +282,8 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.adsListFragment).setVisibility(View.GONE);
         findViewById(R.id.adPageFragment).setVisibility(View.GONE);
         findViewById(R.id.favsListFragment).setVisibility(View.VISIBLE);
+        findViewById(R.id.myAdsListFragment).setVisibility(View.GONE);
+
 
         if(getSupportFragmentManager().findFragmentById(R.id.catFragment) != null) {
             getSupportFragmentManager().beginTransaction().
@@ -280,6 +301,10 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().
                     remove(getSupportFragmentManager().findFragmentById(R.id.adPageFragment)).commit();
         }
+        if(getSupportFragmentManager().findFragmentById(R.id.myAdsListFragment) != null) {
+            getSupportFragmentManager().beginTransaction().
+                    remove(getSupportFragmentManager().findFragmentById(R.id.myAdsListFragment)).commit();
+        }
 
         Fragment fragment = new FavsListing();
 
@@ -292,6 +317,49 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.favsListFragment, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
+    }
+
+    //Setup myads Fragment and Close other in Home
+    public void myads(String Uid){
+        findViewById(R.id.catFragment).setVisibility(View.GONE);
+        findViewById(R.id.newAdFragment).setVisibility(View.GONE);
+        findViewById(R.id.adsListFragment).setVisibility(View.GONE);
+        findViewById(R.id.adPageFragment).setVisibility(View.GONE);
+        findViewById(R.id.favsListFragment).setVisibility(View.GONE);
+        findViewById(R.id.myAdsListFragment).setVisibility(View.VISIBLE);
+
+        if(getSupportFragmentManager().findFragmentById(R.id.catFragment) != null) {
+            getSupportFragmentManager().beginTransaction().
+                    remove(getSupportFragmentManager().findFragmentById(R.id.catFragment)).commit();
+        }
+        if(getSupportFragmentManager().findFragmentById(R.id.newAdFragment) != null) {
+            getSupportFragmentManager().beginTransaction().
+                    remove(getSupportFragmentManager().findFragmentById(R.id.newAdFragment)).commit();
+        }
+        if(getSupportFragmentManager().findFragmentById(R.id.adsListFragment) != null) {
+            getSupportFragmentManager().beginTransaction().
+                    remove(getSupportFragmentManager().findFragmentById(R.id.adsListFragment)).commit();
+        }
+        if(getSupportFragmentManager().findFragmentById(R.id.adPageFragment) != null) {
+            getSupportFragmentManager().beginTransaction().
+                    remove(getSupportFragmentManager().findFragmentById(R.id.adPageFragment)).commit();
+        }
+        if(getSupportFragmentManager().findFragmentById(R.id.favsListFragment) != null) {
+            getSupportFragmentManager().beginTransaction().
+                    remove(getSupportFragmentManager().findFragmentById(R.id.favsListFragment)).commit();
+        }
+
+        Fragment fragment = new MyAds();
+
+        //Passing the Uid of logged in user via bundle to favs fragment.
+        Bundle bundle = new Bundle();
+        bundle.putString("Uid",Uid);
+
+        fragment.setArguments(bundle);
+
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.myAdsListFragment, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
     }
 
     //Sign out and back to login screen

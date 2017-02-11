@@ -67,9 +67,11 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
                     ((MainActivity)holder.mcontext).favs(Uid);
 
                 }
-                else if (tab.equals("My ads")){
+                else if (tab.equals("My Ads")){
                     ((MainActivity)holder.mcontext).getDrawerLayout().closeDrawer(Gravity.LEFT);
+                    String Uid =  ((MainActivity)holder.mcontext).getUid();
 
+                    ((MainActivity)holder.mcontext).myads(Uid);
                 }
                 else if (tab.equals("New Ad")){
                     //newad

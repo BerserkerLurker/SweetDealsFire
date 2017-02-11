@@ -78,6 +78,16 @@
 
 
         </FrameLayout>
+
+        <FrameLayout
+            class="com.kallinikos.tech.sweetdealsfire.app.MyAds"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/myAdsListFragment"
+            tools:layout="@layout/fragment_my_ads">
+
+
+        </FrameLayout>
     </LinearLayout>
 
     <fragment

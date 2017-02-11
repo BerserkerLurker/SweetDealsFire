@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +12,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -27,11 +31,11 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by kallinikos on 07/02/17.
+ * Created by kallinikos on 10/02/17.
  */
 
-public class FavsListAdapter extends RecyclerView.Adapter<FavsListAdapter.MyViewHolder> {
-    private static final String TAG = FavsListAdapter.class.getSimpleName();
+public class MyAdsAdapter extends RecyclerView.Adapter<MyAdsAdapter.MyViewHolder>{
+    private static final String TAG = MyAdsAdapter.class.getSimpleName();
 
 
     private List<AdImage> mData;
@@ -45,13 +49,13 @@ public class FavsListAdapter extends RecyclerView.Adapter<FavsListAdapter.MyView
 
     private Context mContext;
     private LayoutInflater mInflater;
-    private static FavsListAdapter.ClickListener clickListener;
+    private static MyAdsAdapter.ClickListener clickListener;
 
     public List<AdImage> getmData() {
         return mData;
     }
 
-    public FavsListAdapter(Context context, List<AdImage> data){
+    public MyAdsAdapter(Context context, List<AdImage> data){
         itemsPendingRemoval = new ArrayList<>();
 
         this.mContext = context;
@@ -61,16 +65,13 @@ public class FavsListAdapter extends RecyclerView.Adapter<FavsListAdapter.MyView
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.fav_list_item, parent, false);
-        FavsListAdapter.MyViewHolder holder = new FavsListAdapter.MyViewHolder(view);
+        View view = mInflater.inflate(R.layout.my_ads_list_item, parent, false);
+        MyAdsAdapter.MyViewHolder holder = new MyAdsAdapter.MyViewHolder(view);
         return holder;
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        /*AdImage currentObj = mData.get(position);
-        holder.setData(currentObj);*/
-
         final AdImage currentObj = mData.get(position);
 
         if (itemsPendingRemoval.contains(currentObj)){
@@ -111,20 +112,12 @@ public class FavsListAdapter extends RecyclerView.Adapter<FavsListAdapter.MyView
             holder.undoButton.setVisibility(View.GONE);
             holder.undoButton.setOnClickListener(null);
         }
-
-        //holder.setData(currentObj);
     }
-
 
     @Override
     public int getItemCount() {
         return mData.size();
     }
-
-
-    /*public void setUndoOn(boolean undoOn) {
-        this.undoOn = undoOn;
-    }*/
 
     public boolean isUndoOn() {
         return true;
@@ -155,13 +148,33 @@ public class FavsListAdapter extends RecyclerView.Adapter<FavsListAdapter.MyView
             itemsPendingRemoval.remove(obj);
         }
         if(mData.contains(obj)){
-            String key = obj.getKey();
+            final String key = obj.getKey();
+            String cat = obj.getCategory();
+            String scat = obj.getSubcategory();
             String uid = ((MainActivity)mContext).getUid();
             mData.remove(position);
             notifyItemRemoved(position);
 
-            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("favs").child(key);
-            ref.removeValue();
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+            ref.child("users").child(uid).child("ads").child(key).removeValue();
+            ref.child("ads").child(key).removeValue();
+            ref.child("categories").child(cat.toLowerCase()).child("ads").child(key).removeValue();
+            ref.child("subcategories").child(scat.toLowerCase()).child("ads").child(key).removeValue();
+
+            //TODO Delete files one by one Fire doesn't support Folder delete
+
+            StorageReference sref = FirebaseStorage.getInstance().getReference();
+            sref.child(key).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Toast.makeText(mContext,"Deleted "+key,Toast.LENGTH_SHORT);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(mContext,"Failed to Delete "+key,Toast.LENGTH_SHORT);
+                }
+            });
         }
     }
 
@@ -171,7 +184,7 @@ public class FavsListAdapter extends RecyclerView.Adapter<FavsListAdapter.MyView
     }
 
 
-    public void updateAdapter(String key,String title, int price, String desc, List<String> listImgURL){
+    public void updateAdapter(String key,String title, int price, String desc, String cat, String scat, List<String> listImgURL){
         AdImage newCard = new AdImage();
         newCard.setKey(key);
         newCard.setTitle(title);
@@ -181,6 +194,9 @@ public class FavsListAdapter extends RecyclerView.Adapter<FavsListAdapter.MyView
 
         newCard.setPrice(price);
         newCard.setDesc(desc);
+
+        newCard.setCategory(cat);
+        newCard.setSubcategory(scat);
 
         mData.add(newCard);
         notifyDataSetChanged();
@@ -192,7 +208,7 @@ public class FavsListAdapter extends RecyclerView.Adapter<FavsListAdapter.MyView
     }
 
     //-----------------------MyViewHolder-----------------------
-    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView title;
         TextView price;
         TextView desc;
@@ -203,11 +219,11 @@ public class FavsListAdapter extends RecyclerView.Adapter<FavsListAdapter.MyView
         Context context;
         public MyViewHolder(View itemView) {
             super(itemView);
-            title = (TextView)itemView.findViewById(R.id.txv_favtitle);
-            price = (TextView)itemView.findViewById(R.id.txv_favprice);
-            desc = (TextView)itemView.findViewById(R.id.txv_favdesc) ;
-            imgThumb = (ImageView)itemView.findViewById(R.id.img_favthumb);
-            undoButton = (Button)itemView.findViewById(R.id.undo_button);
+            title = (TextView)itemView.findViewById(R.id.txv_my_ads_title);
+            price = (TextView)itemView.findViewById(R.id.txv_my_ads_price);
+            desc = (TextView)itemView.findViewById(R.id.txv_my_ads_desc) ;
+            imgThumb = (ImageView)itemView.findViewById(R.id.img_my_ads_thumb);
+            undoButton = (Button)itemView.findViewById(R.id.my_ads_undo_button);
             context = itemView.getContext();
 
             itemView.setOnClickListener(this);
@@ -268,7 +284,7 @@ public class FavsListAdapter extends RecyclerView.Adapter<FavsListAdapter.MyView
     }
 
     public void setOnItemClickListener(ClickListener clickListener) {
-        FavsListAdapter.clickListener = clickListener;
+        MyAdsAdapter.clickListener = clickListener;
     }
 
     public interface ClickListener{

@@ -34,7 +34,7 @@ import java.util.Map;
  * A simple {@link Fragment} subclass.
  */
 public class FavsListing extends Fragment implements Callbackfavs{
-    private static final String TAG = AdsFragment.class.getSimpleName();
+    private static final String TAG = FavsListing.class.getSimpleName();
     private String userId;
     private FavsListAdapter adapter;
     private RecyclerView recyclerView;
