@@ -1,5 +1,6 @@
 package com.kallinikos.tech.sweetdealsfire.app;
 
+import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +26,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.kallinikos.tech.sweetdealsfire.R;
 import com.kallinikos.tech.sweetdealsfire.dbmodels.User;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import br.com.mauker.materialsearchview.MaterialSearchView;
 
 public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
@@ -39,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private String name;
     private String Uid;
 
+    private MaterialSearchView searchView;
     private Bundle savedInstanceState;
 
     private static final String TAG="Main";
@@ -54,6 +62,14 @@ public class MainActivity extends AppCompatActivity {
         userpic = (ImageView)findViewById(R.id.dwr_userpic);
         username = (TextView)findViewById(R.id.dwr_username);
 
+        //Toolbar Setup
+        setUpToolbar();
+
+        //NavDrawer Setup
+        setUpDrawer();
+
+        //Home Setup
+        categories();
 
         //----------------Firebase----------------
         mAuth = FirebaseAuth.getInstance();
@@ -85,15 +101,47 @@ public class MainActivity extends AppCompatActivity {
         //----------------Firebase----------------
 
 
+        searchView = (MaterialSearchView)findViewById(R.id.search_view);
+        final List<String> suggestions = new ArrayList<>();
+        suggestions.add("Car");
+        suggestions.add("T-shirt");
+        suggestions.add("Shoes");
+        //searchView.addSuggestions(suggestions);
+        searchView.clearSuggestions();
 
-        //Toolbar Setup
-        setUpToolbar();
+        searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selection = (String)parent.getItemAtPosition(position);
+                Toast.makeText(getApplicationContext(),selection,Toast.LENGTH_SHORT).show();
+                search(selection);
+                searchView.closeSearch();
+            }
+        });
 
-        //NavDrawer Setup
-        setUpDrawer();
 
-        //Home Setup
-        categories();
+        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Toast.makeText(getApplicationContext(),"Enter",Toast.LENGTH_SHORT).show();
+                search(query);
+                searchView.closeSearch();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.length() > 1) {
+                    //Toast.makeText(getApplicationContext(),"hello",Toast.LENGTH_SHORT).show();
+                    searchView.addSuggestions(suggestions);
+
+                }
+
+                return true;
+            }
+        });
+
+
         //newad();
         //adsListing("test");
 
@@ -210,6 +258,25 @@ public class MainActivity extends AppCompatActivity {
             bundle.putString("Uid",Uid);
             myAds.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, myAds).commit();
+        }
+    }
+
+    public void search(String query){
+        if (findViewById(R.id.fragment_container) != null){
+            if (savedInstanceState != null){
+                //String test = savedInstanceState.getString("query");
+                return;
+            }
+
+
+            toolbar.setTitle("Search Results");
+
+            SearchResult searchResult = new SearchResult();
+            //Passing the Uid of logged in user via bundle to favs fragment.
+            Bundle bundle = new Bundle();
+            bundle.putString("query",query);
+            searchResult.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, searchResult).commit();
         }
     }
 
@@ -526,13 +593,13 @@ public class MainActivity extends AppCompatActivity {
     //Prevents going back on mem stack
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        startActivity(intent);
-
-        /*if(getFragmentManager().findFragmentById(R.id.adPageFragment)){
-            categories();
-        }*/
+        if(searchView.isOpen()){
+            searchView.closeSearch();
+        }else{
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            startActivity(intent);
+        }
     }
 
     //Three dots menu
@@ -540,6 +607,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main,menu);
         return true;
+    }
+
+    public void closeSearchTab(){
+        searchView.closeSearch();
     }
 
     //Three dots menu listener
@@ -550,6 +621,8 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.search:
                 msg = "Search";
+                searchView.openSearch();
+                searchView.bringToFront();
                 break;
 
             case R.id.edit:

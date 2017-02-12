@@ -1,6 +1,7 @@
 package com.kallinikos.tech.sweetdealsfire.app;
 
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -97,12 +98,14 @@ public class NavigationDrawerFragment extends Fragment {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+                ((MainActivity)getActivity()).closeSearchTab();
                 getActivity().invalidateOptionsMenu();
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
+                //getActivity().findViewById(R.id.search_view).setVisibility(View.VISIBLE);
                 getActivity().invalidateOptionsMenu();
             }
 
