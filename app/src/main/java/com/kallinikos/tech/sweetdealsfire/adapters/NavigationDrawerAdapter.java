@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.kallinikos.tech.sweetdealsfire.R;
 import com.kallinikos.tech.sweetdealsfire.app.MainActivity;
 import com.kallinikos.tech.sweetdealsfire.models.NavigationDrawerItem;
@@ -45,7 +46,12 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         NavigationDrawerItem current = mDataList.get(position);
 
-        holder.imgIcon.setImageResource(current.getImageId());
+        //holder.imgIcon.setImageResource(current.getImageId());
+        Glide.with(context)
+                .load(current.getImageId())
+                .into(holder.imgIcon);
+
+
         holder.title.setText(current.getTitle());
 
 
@@ -98,6 +104,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
                     ((MainActivity)holder.mcontext).getDrawerLayout().closeDrawer(Gravity.LEFT);
 
                     ((MainActivity)holder.mcontext).about();
+                    //((MainActivity)holder.mcontext).fullscreen();
 
                 }
 

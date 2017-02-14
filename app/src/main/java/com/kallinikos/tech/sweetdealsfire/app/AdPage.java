@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -69,6 +70,12 @@ public class AdPage extends Fragment {
 
     private AdPageAdapter adapter;
     private RecyclerView recyclerView;
+
+
+
+    private List<AdImage> imgListFull;
+
+
     public AdPage() {
         // Required empty public constructor
     }
@@ -137,6 +144,18 @@ public class AdPage extends Fragment {
                     LinearLayoutManager mLinearLayoutManagerHorizontal = new LinearLayoutManager(getActivity());
                     mLinearLayoutManagerHorizontal.setOrientation(LinearLayoutManager.HORIZONTAL);
                     recyclerView.setLayoutManager(mLinearLayoutManagerHorizontal);
+
+                    //TESSSSSSSSSSSSSSSSSSSSST
+                    setImgList(imgList);
+
+                    adapter.setOnItemClickListener(new AdPageAdapter.ClickListener() {
+                        @Override
+                        public void onItemClick(int position, View v) {
+                            ((MainActivity)getActivity()).fullscreen(imgListFull, position);
+
+                        }
+                    });
+
 
                     StorageReference ref = FirebaseStorage.getInstance().getReference().child(imgList.get(0).getImageId());
                     /*Glide.with(getContext())
@@ -237,5 +256,11 @@ public class AdPage extends Fragment {
         });
     }
 
+
+
+    //TESSSSSSSSSSSSSSSSSSSSST
+    private void setImgList(List<AdImage> imgList){
+        imgListFull = imgList;
+    }
 
 }

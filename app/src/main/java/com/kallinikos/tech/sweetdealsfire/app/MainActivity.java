@@ -28,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.kallinikos.tech.sweetdealsfire.R;
 import com.kallinikos.tech.sweetdealsfire.dbmodels.User;
+import com.kallinikos.tech.sweetdealsfire.models.AdImage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -309,6 +310,24 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    public void fullscreen(List<AdImage> imgList, int position){
+        if (findViewById(R.id.fragment_container) != null){
+            if (savedInstanceState != null){
+                return;
+            }
+
+            FullScreenView fullScreenView = new FullScreenView();
+
+            fullScreenView.setImgList(imgList);
+
+            Bundle bundle = new Bundle();
+            bundle.putInt("pos",position);
+            fullScreenView.setArguments(bundle);
+
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fullScreenView,"fullScreenView").commit();
+        }
+    }
 
     /**
 
@@ -623,6 +642,19 @@ public class MainActivity extends AppCompatActivity {
     //Prevents going back on mem stack
     @Override
     public void onBackPressed() {
+        /*FullScreenView fullScreenView = (FullScreenView) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (fullScreenView.isVisible()){
+            getSupportFragmentManager().beginTransaction().remove(fullScreenView);
+        }*/
+
+        List<Fragment> fragList = getSupportFragmentManager().getFragments();
+        for(Fragment frag : fragList){
+            if(frag instanceof FullScreenView){
+                getSupportFragmentManager().beginTransaction().remove(frag).commit();
+                return;
+            }
+        }
+
         if(searchView.isOpen()){
             searchView.closeSearch();
         }else{
@@ -630,6 +662,7 @@ public class MainActivity extends AppCompatActivity {
             intent.addCategory(Intent.CATEGORY_HOME);
             startActivity(intent);
         }
+
     }
 
     //Three dots menu

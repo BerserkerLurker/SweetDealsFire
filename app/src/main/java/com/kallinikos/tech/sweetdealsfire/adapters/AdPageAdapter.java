@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -29,7 +30,7 @@ public class AdPageAdapter extends RecyclerView.Adapter<AdPageAdapter.MyViewHold
     private List<AdImage> mData;
     private LayoutInflater mInflater;
 
-    private static ClickListener clickListener;
+    private static AdPageAdapter.ClickListener clickListener;
 
     public List<AdImage> getmData(){
         return mData;
@@ -88,6 +89,7 @@ public class AdPageAdapter extends RecyclerView.Adapter<AdPageAdapter.MyViewHold
                 Glide.with(context)
                         .using(new FirebaseImageLoader())
                         .load(ref)
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .placeholder(R.drawable.loadplaceholder)
                         .animate(android.R.anim.slide_in_left)
                         .error(R.drawable.noimage)
@@ -104,7 +106,7 @@ public class AdPageAdapter extends RecyclerView.Adapter<AdPageAdapter.MyViewHold
 
         @Override
         public void onClick(View view) {
-
+            clickListener.onItemClick(getAdapterPosition(), view);
         }
     }
     public void setOnItemClickListener(ClickListener clickListener) {

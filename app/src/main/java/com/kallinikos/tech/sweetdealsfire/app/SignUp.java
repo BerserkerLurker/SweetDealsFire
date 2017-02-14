@@ -35,6 +35,7 @@ public class SignUp extends AppCompatActivity {
     private EditText mobileText;
     private EditText emailText;
     private EditText passwordText;
+    private EditText confirmText;
 
 
     private ProgressDialog progressDialog;
@@ -52,6 +53,7 @@ public class SignUp extends AppCompatActivity {
         passwordText = (EditText)findViewById(R.id.input_password);
         mobileText = (EditText)findViewById(R.id.input_mobile);
         usernameText = (EditText)findViewById(R.id.input_username);
+        confirmText = (EditText)findViewById(R.id.input_confirm_password);
 
         progressDialog = new ProgressDialog(this);
 
@@ -163,6 +165,7 @@ public class SignUp extends AppCompatActivity {
         String mobile = mobileText.getText().toString();
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
+        String confirm = confirmText.getText().toString();
 /*
         if (realname.isEmpty() || realname.length() < 3) {
             realnameText.setError("at least 3 characters");
@@ -197,6 +200,13 @@ public class SignUp extends AppCompatActivity {
             valid = false;
         } else {
             passwordText.setError(null);
+        }
+
+        if (confirm.isEmpty() || !confirm.equals(password)){
+            confirmText.setError("must be equal to password");
+            valid = false;
+        }else{
+            confirmText.setError(null);
         }
 
         return valid;

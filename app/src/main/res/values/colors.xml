@@ -18,4 +18,6 @@
     <color name="green009900">#009900</color>
     <color name="green00b200">#00b200</color>
 
+    <item name="transbg" type="color">#CC000000</item>
+
 </resources>

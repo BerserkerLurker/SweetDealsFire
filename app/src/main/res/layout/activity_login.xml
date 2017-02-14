@@ -64,6 +64,15 @@
             android:text="No account yet? Create one"
             android:gravity="center"
             android:textSize="16dp"/>
+
+        <TextView
+            android:id="@+id/link_resetpwd"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:text="Forgot your password?"
+            android:gravity="center"
+            android:textSize="16dp"/>
     </LinearLayout>
 
 

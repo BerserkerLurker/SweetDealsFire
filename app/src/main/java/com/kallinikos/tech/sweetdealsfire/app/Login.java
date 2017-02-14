@@ -76,6 +76,30 @@ public class Login extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        findViewById(R.id.link_resetpwd).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth auth = FirebaseAuth.getInstance();
+                String emailAddress = inputEmail.getText().toString();
+
+                if (validEmail(emailAddress)){
+                    auth.sendPasswordResetEmail(emailAddress)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(getApplicationContext(), "Email sent",Toast.LENGTH_SHORT).show();
+
+                                        Log.d(TAG, "Email sent.");
+                                    }
+                                }
+                            });
+                }else{
+                    Toast.makeText(view.getContext(), "Invalid Email",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override
@@ -128,6 +152,10 @@ public class Login extends AppCompatActivity {
         });
     }
 
+    public boolean validEmail(String email)
+    {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
 
     public boolean validate() {
         boolean valid = true;
