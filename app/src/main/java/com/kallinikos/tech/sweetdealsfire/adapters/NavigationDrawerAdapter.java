@@ -97,6 +97,8 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
                 else if (tab.equals("About")){
                     ((MainActivity)holder.mcontext).getDrawerLayout().closeDrawer(Gravity.LEFT);
 
+                    ((MainActivity)holder.mcontext).about();
+
                 }
 
 

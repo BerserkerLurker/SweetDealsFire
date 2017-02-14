@@ -295,6 +295,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void about(){
+        if (findViewById(R.id.fragment_container) != null){
+            if (savedInstanceState != null){
+                return;
+            }
+
+
+            toolbar.setTitle("About");
+
+            About about = new About();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, about).commit();
+        }
+    }
+
+
     /**
 
     public void categories(){
