@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.kallinikos.tech.sweetdealsfire.adapters.NavigationDrawerAdapter;
 import com.kallinikos.tech.sweetdealsfire.models.NavigationDrawerItem;
 import com.kallinikos.tech.sweetdealsfire.R;
@@ -32,7 +35,7 @@ import com.kallinikos.tech.sweetdealsfire.R;
 public class NavigationDrawerFragment extends Fragment {
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
-
+    private FirebaseUser user;
 
 
     public NavigationDrawerFragment() {
@@ -44,6 +47,8 @@ public class NavigationDrawerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_navigation_drawer,container,false);
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
         final ImageView userPic = (ImageView)view.findViewById(R.id.dwr_userpic);
         /*Glide.with(getContext())
                 .using(new FirebaseImageLoader())
@@ -62,24 +67,52 @@ public class NavigationDrawerFragment extends Fragment {
                         imageThumb.setImageDrawable(circularBitmapDrawable);
                     }});*/
 
-        Glide.with(getContext())
-                .load(R.drawable.bag)
-                .asBitmap()
-                .placeholder(R.drawable.users)
-                .animate(android.R.anim.fade_in)
-                .error(R.drawable.noimage)
-                .centerCrop()
-                .into(new BitmapImageViewTarget(userPic) {
-                    @Override
-                    protected void setResource(Bitmap resource) {
-                        RoundedBitmapDrawable circularBitmapDrawable =
-                                RoundedBitmapDrawableFactory.create(getContext().getResources(), resource);
-                        circularBitmapDrawable.setCircular(true);
-                        userPic.setImageDrawable(circularBitmapDrawable);
-                    }});
 
+        //TODO Profile picture won't work change it to firebase storage
+        if (user.getPhotoUrl()!= null) {
+            Glide.with(getContext())
+                    .load(user.getPhotoUrl().toString())
+                    .asBitmap()
+                    .placeholder(R.drawable.users)
+                    .animate(android.R.anim.fade_in)
+                    .error(R.drawable.noimage)
+                    .centerCrop()
+                    .into(new BitmapImageViewTarget(userPic) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(getContext().getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            userPic.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+        }else{
+            Glide.with(getContext())
+                    .load(R.drawable.users)
+                    .asBitmap()
+                    .placeholder(R.drawable.users)
+                    .animate(android.R.anim.fade_in)
+                    .error(R.drawable.noimage)
+                    .centerCrop()
+                    .into(new BitmapImageViewTarget(userPic) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(getContext().getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            userPic.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+        }
 
-
+        userPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)getContext()).getDrawerLayout().closeDrawer(Gravity.LEFT);
+                String Uid =  ((MainActivity)getContext()).getUid();
+                ((MainActivity)getContext()).profile(Uid);
+            }
+        });
         setUpRecyclerView(view);
         return view;
     }

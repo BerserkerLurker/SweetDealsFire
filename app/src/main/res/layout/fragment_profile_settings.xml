@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fitsSystemWindows="true"
+    android:background="#ffffff">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <!--Picture-->
+    <RelativeLayout
+        android:id="@+id/topPanel"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@color/cardview_dark_background">
+        <ImageView
+            android:id="@+id/profilepic"
+            android:src="@drawable/businessman"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"/>
+
+    </RelativeLayout>
+    <!--Picture-->
+
+    <LinearLayout
+        android:id="@+id/bottompanel"
+        android:animateLayoutChanges="true"
+        android:layout_margin="5dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/topPanel">
+
+
+        <!--Name-->
+        <RelativeLayout
+            android:background="?android:attr/selectableItemBackground"
+            android:id="@+id/namepanel"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/p1"
+                android:src="@drawable/username"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentLeft="true"/>
+            <TextView
+                android:text="Change display name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_toEndOf="@id/p1"
+                android:layout_marginLeft="10dp"/>
+            <ImageView
+                android:id="@+id/p11"
+                android:src="@drawable/expanddown"
+                android:tint="@color/grey_600"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="5dp"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:visibility="gone"
+            android:id="@+id/namepanel2"
+            android:layout_marginTop="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:visibility="gone"
+                android:id="@+id/nameinput"
+                android:inputType="text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_toStartOf="@+id/confirmname"
+                android:maxLines="1"/>
+            <android.support.v7.widget.AppCompatButton
+                android:visibility="gone"
+                android:id="@+id/confirmname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="Confirm"
+                android:layout_alignParentRight="true"/>
+
+        </RelativeLayout>
+        <!--Name-->
+
+
+        <!--Phone-->
+        <RelativeLayout
+            android:id="@+id/phonepanel"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/p2"
+                android:src="@drawable/phonenumber"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentLeft="true"/>
+            <TextView
+                android:text="Change phone number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_toEndOf="@id/p2"
+                android:layout_marginLeft="10dp"/>
+            <ImageView
+                android:id="@+id/p22"
+                android:src="@drawable/expanddown"
+                android:tint="@color/grey_600"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="5dp"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:visibility="gone"
+            android:id="@+id/phonepanel2"
+            android:layout_marginTop="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/phoneinput"
+                android:inputType="phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_toStartOf="@+id/confirmphone"
+                android:maxLines="1"/>
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/confirmphone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="Confirm"
+                android:layout_alignParentRight="true"/>
+
+        </RelativeLayout>
+        <!--Phone-->
+
+
+        <!--Email-->
+        <RelativeLayout
+            android:id="@+id/emailpanel"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/p3"
+                android:src="@drawable/mail"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentLeft="true"/>
+            <TextView
+                android:text="Change email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_toEndOf="@id/p3"
+                android:layout_marginLeft="10dp"/>
+            <ImageView
+                android:id="@+id/p33"
+                android:src="@drawable/expanddown"
+                android:tint="@color/grey_600"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="5dp"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:visibility="gone"
+            android:id="@+id/emailpanel2"
+            android:layout_marginTop="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/emailinput"
+                android:inputType="textEmailAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_toStartOf="@+id/confirmemail"
+                android:maxLines="1"/>
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/confirmemail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="Confirm"
+                android:layout_alignParentRight="true"/>
+
+        </RelativeLayout>
+        <!--Email-->
+
+
+        <!--Password-->
+        <RelativeLayout
+            android:id="@+id/passwordpanel"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/p4"
+                android:src="@drawable/key"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentLeft="true"/>
+            <TextView
+                android:text="Change password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_toEndOf="@id/p4"
+                android:layout_marginLeft="10dp"/>
+            <ImageView
+                android:id="@+id/p44"
+                android:src="@drawable/expanddown"
+                android:tint="@color/grey_600"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="5dp"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:visibility="gone"
+            android:id="@+id/passwordpanel2"
+            android:layout_marginTop="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/passwordinput"
+                android:inputType="textPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_toStartOf="@+id/confirmpassword"
+                android:maxLines="1"/>
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/confirmpassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="Confirm"
+                android:layout_alignParentRight="true"/>
+
+        </RelativeLayout>
+        <!--Password-->
+
+
+        <!--Delete-->
+        <RelativeLayout
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/p5"
+                android:src="@drawable/rubbishbin"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentLeft="true"/>
+            <TextView
+                android:text="Delete account"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_toEndOf="@id/p5"
+                android:layout_marginLeft="10dp"/>
+            <Switch
+                android:id="@+id/deleteswitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"/>
+        </RelativeLayout>
+        <!--Delete-->
+    </LinearLayout>
+
+</RelativeLayout>
+</android.support.v4.widget.NestedScrollView>

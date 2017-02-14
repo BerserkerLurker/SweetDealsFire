@@ -48,6 +48,8 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
         holder.imgIcon.setImageResource(current.getImageId());
         holder.title.setText(current.getTitle());
 
+
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

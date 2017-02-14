@@ -19,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -162,6 +164,19 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.catFrame, fragment, "catFragment").addToBackStack(null).commit();
     }*/
+
+    public void profile(String Uid){
+        if (findViewById(R.id.fragment_container) != null){
+            if (savedInstanceState != null){
+                return;
+            }
+
+            toolbar.setTitle("Profile Settings");
+
+            ProfileSettings profileSettings = new ProfileSettings();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, profileSettings).commit();
+        }
+    }
 
     public void categories(){
         if (findViewById(R.id.fragment_container) != null){
