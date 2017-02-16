@@ -9,10 +9,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -33,9 +37,12 @@ public class FullScreenView extends Fragment {
 
     private List<AdImage> imgList;
     private int position;
-    private ImageView imgFull;
+    int i;
+
     private RelativeLayout btleft;
     private RelativeLayout btright;
+
+    private ImageSwitcher imgSwitcher;
 
     public FullScreenView() {
         // Required empty public constructor
@@ -43,7 +50,7 @@ public class FullScreenView extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         Bundle bundle = this.getArguments();
         if (bundle != null){
@@ -56,19 +63,38 @@ public class FullScreenView extends Fragment {
         int size = imgList.size();
         Toast.makeText(getContext(),size+"/"+position,Toast.LENGTH_SHORT).show();
 
-        imgFull = (ImageView)view.findViewById(R.id.img_full);
+
+        imgSwitcher = (ImageSwitcher)view.findViewById(R.id.img_switcher);
+
         final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.prog_bar);
         btleft = (RelativeLayout)view.findViewById(R.id.leftbt);
         btright = (RelativeLayout)view.findViewById(R.id.rightbt);
 
 
-        int i = position;
-        control(i, size);
+        i = position;
 
-        StorageReference ref = FirebaseStorage.getInstance().getReference().child(imgList.get(position).getImageId());
+        imgSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
+            @Override
+            public View makeView() {
+                ImageView imageView = new ImageView(getContext());
+                imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                imageView.setLayoutParams(new ImageSwitcher.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                return imageView;
+            }
+        });
+
+        Animation in = AnimationUtils.loadAnimation(getContext(), R.anim.in);
+        Animation out = AnimationUtils.loadAnimation(getContext(), R.anim.out);
+
+        imgSwitcher.setInAnimation(in);
+        imgSwitcher.setOutAnimation(out);
+
+
+        StorageReference ref = FirebaseStorage.getInstance().getReference().child(imgList.get(i).getImageId());
         Glide.with(getContext())
                 .using(new FirebaseImageLoader())
-                .load(ref).listener(new RequestListener<StorageReference, GlideDrawable>() {
+                .load(ref)
+                .listener(new RequestListener<StorageReference, GlideDrawable>() {
             @Override
             public boolean onException(Exception e, StorageReference model, Target<GlideDrawable> target, boolean isFirstResource) {
                 progressBar.setVisibility(View.GONE);
@@ -83,9 +109,72 @@ public class FullScreenView extends Fragment {
         })
                 .animate(android.R.anim.slide_in_left)
                 .centerCrop()
-                .into(imgFull);
+                .into((ImageView)imgSwitcher.getCurrentView());
+
+        control(i,imgList.size());
 
 
+        btleft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(i>0){
+                    i--;
+                    StorageReference ref = FirebaseStorage.getInstance().getReference().child(imgList.get(i).getImageId());
+                    Glide.with(getContext())
+                            .using(new FirebaseImageLoader())
+                            .load(ref).listener(new RequestListener<StorageReference, GlideDrawable>() {
+                        @Override
+                        public boolean onException(Exception e, StorageReference model, Target<GlideDrawable> target, boolean isFirstResource) {
+                            progressBar.setVisibility(View.GONE);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(GlideDrawable resource, StorageReference model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            progressBar.setVisibility(View.GONE);
+                            return false;
+                        }
+                    })
+                            .animate(android.R.anim.slide_in_left)
+                            .centerCrop()
+                            .into((ImageView)imgSwitcher.getCurrentView());
+
+
+                    control(i,imgList.size());
+
+                }
+            }
+        });
+
+        btright.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(i<imgList.size()-1){
+                    i++;
+                    StorageReference ref = FirebaseStorage.getInstance().getReference().child(imgList.get(i).getImageId());
+                    Glide.with(getContext())
+                            .using(new FirebaseImageLoader())
+                            .load(ref).listener(new RequestListener<StorageReference, GlideDrawable>() {
+                        @Override
+                        public boolean onException(Exception e, StorageReference model, Target<GlideDrawable> target, boolean isFirstResource) {
+                            progressBar.setVisibility(View.GONE);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(GlideDrawable resource, StorageReference model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            progressBar.setVisibility(View.GONE);
+                            return false;
+                        }
+                    })
+                            .animate(android.R.anim.slide_in_left)
+                            .centerCrop()
+                            .into((ImageView)imgSwitcher.getCurrentView());
+
+                    control(i,imgList.size());
+                }
+            }
+        });
 
         return view;
     }

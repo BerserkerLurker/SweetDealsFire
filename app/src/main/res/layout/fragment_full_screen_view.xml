@@ -14,12 +14,13 @@
         android:layout_height="100dp"
         android:layout_centerInParent="true"/>
 
-    <ImageView
-        android:id="@+id/img_full"
+
+    <ImageSwitcher
+        android:id="@+id/img_switcher"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:src="@drawable/bag"/>
+        android:layout_height="match_parent">
+
+    </ImageSwitcher>
 
     <RelativeLayout
         android:layout_width="70dp"
