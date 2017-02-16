@@ -2,11 +2,17 @@ package com.kallinikos.tech.sweetdealsfire.app;
 
 
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +24,14 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
@@ -28,10 +40,15 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.kallinikos.tech.sweetdealsfire.R;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -70,7 +87,7 @@ public class ProfileSettings extends Fragment {
 
     private Switch deleteSwitch;
 
-
+    private static int PICKIMG=1;
     public ProfileSettings() {
         // Required empty public constructor
     }
@@ -122,24 +139,18 @@ public class ProfileSettings extends Fragment {
         user = FirebaseAuth.getInstance().getCurrentUser();
         mref = FirebaseDatabase.getInstance().getReference().child("users");
 
-        //TODO Profile picture won't work change it to firebase storage
+        if (user.getPhotoUrl()!=null){
+            updateProfilePic2(user.getPhotoUrl());
+        }
 
         //Picture
+
         profilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                        .setPhotoUri(Uri.parse("http://www.hit4hit.org/img/login/user-icon-6.png"))
-                        .build();
-                user.updateProfile(profileUpdates)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()){
-                                    Toast.makeText(getContext(),"Picture updated",Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setType("image/*");
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICKIMG);
             }
         });
 
@@ -462,5 +473,121 @@ public class ProfileSettings extends Fragment {
     public boolean validPassword(String password)
     {
         return password.trim().length()>5;
+    }
+
+    public void updateProfilePic(Uri url){
+
+        final ImageView userPic = (ImageView)getActivity().findViewById(R.id.dwr_userpic);
+        //userPic.setImageResource(R.drawable.users);
+        if (user.getPhotoUrl()!= null) {
+            Glide.with(getActivity())
+                    .load(url.toString())
+                    .asBitmap()
+                    .placeholder(R.drawable.users)
+                    .animate(android.R.anim.fade_in)
+                    .error(R.drawable.noimage)
+                    .centerCrop()
+                    .into(new BitmapImageViewTarget(userPic) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(getActivity().getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            userPic.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+
+        }else{
+            Glide.with(getActivity())
+                    .load(R.drawable.users)
+                    .asBitmap()
+                    .placeholder(R.drawable.users)
+                    .animate(android.R.anim.fade_in)
+                    .error(R.drawable.noimage)
+                    .centerCrop()
+                    .into(new BitmapImageViewTarget(userPic) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(getActivity().getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            userPic.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+        }
+    }
+
+    public void updateProfilePic2(Uri url){
+        if (user.getPhotoUrl()!= null) {
+            Glide.with(getActivity())
+                    .load(url.toString())
+                    .asBitmap()
+                    .placeholder(R.drawable.businessman)
+                    .animate(android.R.anim.fade_in)
+                    .error(R.drawable.noimage)
+                    .centerCrop()
+                    .into(new BitmapImageViewTarget(profilePic) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(getActivity().getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            profilePic.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+        }else{
+            Glide.with(getActivity())
+                    .load(R.drawable.businessman)
+                    .asBitmap()
+                    .placeholder(R.drawable.businessman)
+                    .animate(android.R.anim.fade_in)
+                    .error(R.drawable.noimage)
+                    .centerCrop()
+                    .into(new BitmapImageViewTarget(profilePic) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(getActivity().getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            profilePic.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+        }
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(resultCode == RESULT_OK){
+            Uri selectedImageUri = data.getData();
+            String ext = getContext().getContentResolver().getType(selectedImageUri);
+
+
+            final StorageReference mStorage = FirebaseStorage.getInstance().getReference().child("profilepics").child(user.getUid()+"."+ext.substring(ext.lastIndexOf("/")+1));
+            mStorage.putFile(selectedImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    final Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                    final UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            .setPhotoUri(downloadUrl)
+                            .build();
+                    user.updateProfile(profileUpdates)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()){
+                                        Toast.makeText(getContext(),"Picture updated",Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+                    updateProfilePic(downloadUrl);
+                    updateProfilePic2(downloadUrl);
+                    Log.d("--------",downloadUrl.toString());
+
+
+
+                }
+            });
+
+
+        }
     }
 }

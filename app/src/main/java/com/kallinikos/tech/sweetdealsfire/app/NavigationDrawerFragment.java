@@ -18,8 +18,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,7 +38,7 @@ public class NavigationDrawerFragment extends Fragment {
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private FirebaseUser user;
-
+    private ImageView userPic;
 
     public NavigationDrawerFragment() {
         // Required empty public constructor
@@ -49,26 +51,9 @@ public class NavigationDrawerFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_navigation_drawer,container,false);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
-        final ImageView userPic = (ImageView)view.findViewById(R.id.dwr_userpic);
-        /*Glide.with(getContext())
-                .using(new FirebaseImageLoader())
-                .load(ref)
-                .asBitmap()
-                .placeholder(R.drawable.loadplaceholder)
-                .animate(android.R.anim.slide_in_left)
-                .error(R.drawable.noimage)
-                .centerCrop()
-                .into(new BitmapImageViewTarget(imageThumb) {
-                    @Override
-                    protected void setResource(Bitmap resource) {
-                        RoundedBitmapDrawable circularBitmapDrawable =
-                                RoundedBitmapDrawableFactory.create(getContext().getResources(), resource);
-                        circularBitmapDrawable.setCircular(true);
-                        imageThumb.setImageDrawable(circularBitmapDrawable);
-                    }});*/
+        userPic = (ImageView)view.findViewById(R.id.dwr_userpic);
 
 
-        //TODO Profile picture won't work change it to firebase storage
         if (user.getPhotoUrl()!= null) {
             Glide.with(getContext())
                     .load(user.getPhotoUrl().toString())
