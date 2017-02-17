@@ -8,6 +8,8 @@
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
 
+    <string name="admin">bla@bla123.com</string>
+
     <string-array name="categories">
         <item>Fashion</item>
         <item>Sports</item>

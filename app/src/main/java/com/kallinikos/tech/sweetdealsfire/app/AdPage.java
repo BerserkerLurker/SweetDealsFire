@@ -29,13 +29,18 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.kallinikos.tech.sweetdealsfire.BuildConfig;
 import com.kallinikos.tech.sweetdealsfire.R;
 import com.kallinikos.tech.sweetdealsfire.adapters.AdPageAdapter;
 import com.kallinikos.tech.sweetdealsfire.dbmodels.Ad;
@@ -56,6 +61,9 @@ import java.util.Objects;
 public class AdPage extends Fragment {
 
     private DatabaseReference mref;
+    private FirebaseRemoteConfig mRemote;
+    private FirebaseUser user;
+
     private String key;
     private String uid;
 
@@ -67,6 +75,8 @@ public class AdPage extends Fragment {
     private Button callBtn;
     private ImageView imageThumb;
     private FloatingActionButton favBtn;
+    private FloatingActionButton delBtn;
+
 
     private AdPageAdapter adapter;
     private RecyclerView recyclerView;
@@ -74,6 +84,11 @@ public class AdPage extends Fragment {
 
 
     private List<AdImage> imgListFull;
+
+    private String adminEmail;
+    private String adUser;
+    private String adCat;
+    private String adSub;
 
 
     public AdPage() {
@@ -91,6 +106,10 @@ public class AdPage extends Fragment {
             uid = bundle.getString("Uid");
             //Toast.makeText(this.getContext(),userId,Toast.LENGTH_SHORT).show();
         }
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
+
         mref = FirebaseDatabase.getInstance().getReference();
         View view = inflater.inflate(R.layout.fragment_ad_page, container, false);
 
@@ -107,7 +126,72 @@ public class AdPage extends Fragment {
         setFromAds(key, uid);
 
 
+        mRemote = FirebaseRemoteConfig.getInstance();
+
+        //Temporary
+        FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
+                .setDeveloperModeEnabled(BuildConfig.DEBUG)
+                .build();
+        mRemote.setConfigSettings(configSettings);
+
+        mRemote.setDefaults(R.xml.remote_config_defaults);
+
+        fetchAdmin();
+        adminEmail = mRemote.getString("admin");
+
+
+
+        delBtn = (FloatingActionButton)view.findViewById(R.id.ad_page_del);
+
+
+
         return view;
+    }
+
+    private void delAd(){
+        if ((user.getEmail()!=null)&&(user.getEmail().toString().equals(adminEmail))){
+            delBtn.setVisibility(View.VISIBLE);
+            delBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getContext(),"Deleted",Toast.LENGTH_SHORT).show();
+                    mref.child("users").child(adUser).child("ads").child(key).removeValue();
+                    mref.child("ads").child(key).removeValue();
+                    mref.child("categories").child(adCat.toLowerCase()).child("ads").child(key).removeValue();
+                    mref.child("subcategories").child(adSub.toLowerCase()).child("ads").child(key).removeValue();
+
+                    //TODO Delete files one by one Fire doesn't support Folder delete
+                    ((MainActivity)getActivity()).categories();
+                }
+            });
+        }
+    }
+
+    private void fetchAdmin(){
+
+        long cacheExpiration = 3600;
+        if (mRemote.getInfo().getConfigSettings().isDeveloperModeEnabled()) {
+            cacheExpiration = 0;
+        }
+
+
+        mRemote.fetch(cacheExpiration)
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getContext(), "Fetch Succeeded",Toast.LENGTH_SHORT).show();
+
+                            mRemote.activateFetched();
+                            adminEmail = mRemote.getString("admin");
+                            delAd();
+
+                        } else {
+                            Toast.makeText(getContext(), "Fetch Failed",Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
     }
 
     private void setFromAds(final String key, final String uid){
@@ -130,6 +214,12 @@ public class AdPage extends Fragment {
 
                 setFav(uid,key,ad.getUser());
 
+                //For admin delete
+                adUser = ad.getUser();
+                adCat = ad.getCategory();
+                adSub = ad.getSubcategory();
+                //For admin delete
+
                 //Toolbar name as cat > subcat
                 ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(ad.getCategory()+" > "+ad.getSubcategory());
 
@@ -145,7 +235,7 @@ public class AdPage extends Fragment {
                     mLinearLayoutManagerHorizontal.setOrientation(LinearLayoutManager.HORIZONTAL);
                     recyclerView.setLayoutManager(mLinearLayoutManagerHorizontal);
 
-                    //TESSSSSSSSSSSSSSSSSSSSST
+                    //Fullscreen
                     setImgList(imgList);
 
                     adapter.setOnItemClickListener(new AdPageAdapter.ClickListener() {
@@ -258,7 +348,7 @@ public class AdPage extends Fragment {
 
 
 
-    //TESSSSSSSSSSSSSSSSSSSSST
+    //Fullscreen
     private void setImgList(List<AdImage> imgList){
         imgListFull = imgList;
     }
